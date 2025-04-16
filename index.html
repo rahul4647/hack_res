@@ -12,11 +12,11 @@
   <script>
     function checkEmail() {
       const email = document.getElementById("emailInput").value;
-      fetch(`https://script.google.com/macros/s/AKfycbz5HmO4HrtEcNBTlIWnAjTYiaeMfhweEV_5cG3QMJaj9ZD2Rs7EmNZXc_iIxuD2wSE9lQ/exec?email=${email}`)
+      fetch(https://script.google.com/macros/s/your-script-id/exec?email=${email})
         .then(res => res.text())
         .then(data => {
           if (data.includes("http")) {
-            document.getElementById("result").innerHTML = `<a href="https://drive.google.com/file/d/1jymTBOzey87Rd2IKqKl1lkImHyQbkvYv/view?usp=sharing" target="_blank">Download PDF</a>`;
+            document.getElementById("result").innerHTML = <a href="${data}" target="_blank">Download PDF</a>;
           } else {
             document.getElementById("result").innerText = "Please fill the form first!";
           }
