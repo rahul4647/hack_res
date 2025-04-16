@@ -16,7 +16,7 @@
         .then(res => res.text())
         .then(data => {
           if (data.includes("http")) {
-            document.getElementById("result").innerHTML = `<a href="${data}" target="_blank">Download PDF</a>`;
+            document.getElementById("result").innerHTML = `<a href="https://drive.google.com/file/d/1jymTBOzey87Rd2IKqKl1lkImHyQbkvYv/view?usp=sharing" target="_blank">Download PDF</a>`;
           } else {
             document.getElementById("result").innerText = "Please fill the form first!";
           }
