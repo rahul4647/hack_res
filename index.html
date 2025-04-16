@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Get Your PDF</title>
+</head>
+<body>
+  <h2>Enter your email to access the PDF</h2>
+  <input type="email" id="emailInput" placeholder="Enter your email" />
+  <button onclick="checkEmail()">Submit</button>
+  <p id="result"></p>
+
+  <script>
+    function checkEmail() {
+      const email = document.getElementById("emailInput").value;
+      fetch(`https://script.google.com/macros/s/AKfycbz5HmO4HrtEcNBTlIWnAjTYiaeMfhweEV_5cG3QMJaj9ZD2Rs7EmNZXc_iIxuD2wSE9lQ/exec?email=${email}`)
+        .then(res => res.text())
+        .then(data => {
+          if (data.includes("http")) {
+            document.getElementById("result").innerHTML = `<a href="${data}" target="_blank">Download PDF</a>`;
+          } else {
+            document.getElementById("result").innerText = "Please fill the form first!";
+          }
+        });
+    }
+  </script>
+</body>
+</html>
