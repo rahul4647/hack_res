@@ -80,6 +80,9 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        iframe {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -95,6 +98,9 @@
         </div>
         <div class="status" id="status"></div>
     </div>
+
+    <!-- Add a hidden iframe for form submission to avoid CORS -->
+    <iframe name="hiddenFrame" id="hiddenFrame"></iframe>
 
     <script>
         document.getElementById('emailForm').addEventListener('submit', function(e) {
@@ -112,47 +118,14 @@
             // Show loading
             loading.style.display = 'block';
             
-            // Your deployed Apps Script web app URL
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyHyL8er7dkf-qdzRqTyOXBr72tHJvckyiw3DnCw2OUHigGTQ4-X-hZpMZbobPmRTdabw/exec';
+            // Use URL parameters approach to avoid CORS issues
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxiPgoM75Tj_3oFfp1BB6M8LoKNGsQ6SlSISf8lSNpehIh-OkpLQx6JOLvVO4UTYVs9Sw/exec';
             
-            fetch(scriptUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                loading.style.display = 'none';
-                
-                if (data.exists) {
-                    // Email exists, provide PDF download
-                    status.textContent = 'Email verified! Downloading your PDF...';
-                    status.className = 'status success';
-                    status.style.display = 'block';
-                    
-                    // Redirect to PDF download
-                    window.location.href = data.pdfUrl;
-                } else {
-                    // Email doesn't exist, redirect to Google Form
-                    status.textContent = 'Redirecting to registration form...';
-                    status.className = 'status error';
-                    status.style.display = 'block';
-                    
-                    // Redirect to Google Form
-                    setTimeout(function() {
-                        window.location.href = data.formUrl;
-                    }, 1500);
-                }
-            })
-            .catch(error => {
-                loading.style.display = 'none';
-                status.textContent = 'Error: ' + error.message;
-                status.className = 'status error';
-                status.style.display = 'block';
-                console.error('Error:', error);
-            });
+            // Construct the URL with the email parameter
+            const url = `${scriptUrl}?email=${encodeURIComponent(email)}`;
+            
+            // Simply redirect to the Apps Script URL with the email parameter
+            window.location.href = url;
         });
     </script>
 </body>
