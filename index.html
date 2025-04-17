@@ -1,89 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StuVis – Access Your PDF</title>
-  <meta name="description" content="StuVis is your AI-powered student life and career companion. Get your free Hackathon Cheatsheet after entering your email!" />
-  <meta name="keywords" content="StuVis, Hackathon Cheatsheet, Student Companion, AI Career Coach, Access PDF" />
-  <meta name="author" content="StuVis Team" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body {
-      background: #0d1117; color: #ffffff; line-height: 1.6;
-      display: flex; justify-content: center; align-items: center; height: 100vh;
-    }
-    .container {
-      background-color: #161b22; border-radius: 12px; padding: 40px 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); width: 350px;
-      text-align: center;
-    }
-    h2 {
-      font-size: 1.8em; color: #00C2CB; margin-bottom: 20px;
-    }
-    input[type="email"] {
-      width: 80%; padding: 12px; margin-bottom: 20px; border-radius: 8px;
-      border: none; font-size: 1em; color: #000;
-    }
-    button {
-      background-color: #00C2CB; color: #000; padding: 12px 20px; border: none;
-      border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; width: 100%;
-    }
-    button:hover {
-      background-color: #00a1a9;
-    }
-    p {
-      font-size: 1em; color: #fff; margin-top: 20px;
-    }
-    a {
-      color: #00C2CB; text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    #result {
-      font-weight: 600; color: #00ff88; margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Access System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3367D6;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #4285F4;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Access Your PDF</h1>
+        <form id="emailForm">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Checking your email...</p>
+        </div>
+        <div class="status" id="status"></div>
+    </div>
 
-  <div class="container">
-    <h2>Enter Your Email to Access Your PDF</h2>
-    <input type="email" id="emailInput" placeholder="Your email" />
-    <button onclick="checkEmail()">Submit</button>
-    <div id="result"></div>
-  </div>
-
-  <script>
-    async function checkEmail() {
-      const email = document.getElementById("emailInput").value;
-      const resultBox = document.getElementById("result");
-
-      resultBox.innerHTML = "<p>⏳ Checking...</p>";
-
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwbakphGm6vD3QFFqW44OAQNJbGFSuJFaKNFn3HAKTJMTL79t2zeOosc1RUMmL0JJ9ScA/exec?email=' + encodeURIComponent(email));
-        const data = await response.json();
-
-        if (data.accessGranted) {
-          resultBox.innerHTML = `
-            <p>✅ Access Granted</p>
-            <p><a href="${data.pdfLink}" target="_blank"><button>Download PDF</button></a></p>
-          `;
-        } else {
-          resultBox.innerHTML = `
-            <p>🚫 Access Denied</p>
-            <p><a href="${data.formLink}" target="_blank"><button>Fill the Form</button></a> to get access.</p>
-          `;
-        }
-      } catch (error) {
-        resultBox.innerHTML = `<p style="color:red">❌ Something went wrong. Please try again later.</p>`;
-        console.error(error);
-      }
-    }
-  </script>
-
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const loading = document.getElementById('loading');
+            const status = document.getElementById('status');
+            
+            // Reset status
+            status.textContent = '';
+            status.className = 'status';
+            status.style.display = 'none';
+            
+            // Show loading
+            loading.style.display = 'block';
+            
+            // Your deployed Apps Script web app URL
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyHyL8er7dkf-qdzRqTyOXBr72tHJvckyiw3DnCw2OUHigGTQ4-X-hZpMZbobPmRTdabw/exec';
+            
+            fetch(scriptUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                
+                if (data.exists) {
+                    // Email exists, provide PDF download
+                    status.textContent = 'Email verified! Downloading your PDF...';
+                    status.className = 'status success';
+                    status.style.display = 'block';
+                    
+                    // Redirect to PDF download
+                    window.location.href = data.pdfUrl;
+                } else {
+                    // Email doesn't exist, redirect to Google Form
+                    status.textContent = 'Redirecting to registration form...';
+                    status.className = 'status error';
+                    status.style.display = 'block';
+                    
+                    // Redirect to Google Form
+                    setTimeout(function() {
+                        window.location.href = data.formUrl;
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                status.textContent = 'Error: ' + error.message;
+                status.className = 'status error';
+                status.style.display = 'block';
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
